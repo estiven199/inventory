@@ -2,13 +2,13 @@ from datetime import timedelta
 
 from fastapi import APIRouter, Header, HTTPException, status
 
-from schemas import token
+from schemas.token import Token
 from core import security
 from core.config import settings
 router = APIRouter()
 
 
-@router.post("/login/access-token", response_model=token.Token)
+@router.post("/login/access-token", response_model=Token)
 def login_access_token(x_token: str = Header(default=None, required=True),
                        x_api_key: str = Header(default=None, required=True),
                        x_secret_id: str = Header(default=None, required=True),

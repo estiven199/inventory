@@ -29,11 +29,11 @@ def create_access_token(
     return encoded_jwt
 
 
-def verify_token(token: str) -> None:
+def verify_token(token: str, output=False) -> None:
     try:
-        # if output:
-        #     return jwt.decode(token, key=getenv("SECRET"), algorithms=["HS256"])
-        jwt.decode(token, key=getenv("SECRET"), algorithms=ALGORITHM)
+        if output:
+            return jwt.decode(token, key=settings.SECRET_KEY, algorithms=["HS256"])
+        jwt.decode(token, key=settings.SECRET_KEY, algorithms=ALGORITHM)
     except exceptions.DecodeError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
