@@ -1,10 +1,10 @@
 from datetime import datetime, timedelta
 
-from jose import jwt
+import jwt
 from passlib.context import CryptContext
 
 from core.config import settings
-from models.auth import keys
+from models.auth import Keys
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -12,7 +12,7 @@ ALGORITHM = "HS256"
 
 
 def create_access_token(
-    data: keys, expires_delta: timedelta = None
+    data: Keys, expires_delta: timedelta = None
 ) -> str:
 
     if expires_delta:
