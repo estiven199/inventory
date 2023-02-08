@@ -10,7 +10,6 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 ALGORITHM = "HS256"
 
-
 def create_access_token(
     data: Keys, expires_delta: timedelta = None
 ) -> str:
