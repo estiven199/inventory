@@ -29,5 +29,8 @@ class CRUDEvent():
     def update_event(self, db: database, event_id: str, obj_in: dict):
         return crudbase.update(db.events, event_id, obj_in)
 
+    def delete_event(self, db: database, event_id: str):
+        return "The event has been deleted." if crudbase.delete(db.events, event_id) == "Done" else "Error"
+
 
 eventCrud = CRUDEvent()

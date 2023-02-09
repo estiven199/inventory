@@ -74,3 +74,10 @@ def updaate_event(event: EvenUpdate, event_id: str, token: str = Header(default=
     event = {k: v for k, v in dict(event).items() if v != None}
     data = eventCrud.update_event(db, event_id, event)
     return data if data else "The event does not exist."
+
+
+@router.delete("/events/{event_id}")
+def delete_event(event_id: str, token: str = Header(default=None, required=True)):
+    db = connect_to_mongo(token)
+    msg = eventCrud.delete_event(db, event_id)
+    return msg

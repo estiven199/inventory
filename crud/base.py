@@ -17,6 +17,11 @@ class CRUDBase():
 
     def find_and_delete_id(self, db: database, id: str):
         db_obj = db.find_one({"_id": ObjectId(id)})
+        if not db_obj:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="The event does not exist.",
+            )
         db_obj['id'] = str(db_obj['_id'])
         del db_obj['_id']
         return db_obj
@@ -28,7 +33,6 @@ class CRUDBase():
 
     def get_all(self, db: database, arg):
         data = []
-        print(arg)
         extre_param = {"$and": [arg]} if arg else {}
         for doc in db.find(extre_param):
             doc['id'] = str(doc['_id'])
@@ -44,6 +48,13 @@ class CRUDBase():
         self.validate_id(id)
         db.find_one_and_update({"_id": ObjectId(id)}, {"$set": obj_in})
         return self.find_and_delete_id(db, id)
+
+    def delete(self, db: database, id: str):
+        self.validate_id(id)
+        self.find_and_delete_id(db, id)
+        db.find_one_and_delete({"_id": ObjectId(id)})
+        return "Done"
+
 
 
 crudbase = CRUDBase()
