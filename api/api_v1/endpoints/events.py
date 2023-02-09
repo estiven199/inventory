@@ -1,6 +1,5 @@
-from pydantic import BaseModel
 from fastapi import APIRouter, HTTPException, status, Header, Query
-from schemas.event import EventSchema
+from schemas.event import EventSchema, EventUpdateSchema
 from db.init_db import connect_to_mongo
 
 
@@ -11,7 +10,7 @@ router = APIRouter()
 
 
 @router.get("/events", response_model=list[EventSchema])
-async def read_items(token: str = Header(default=None, required=True),
+async def read_events(token: str = Header(default=None, required=True),
                      status: str | None = Query(
         default=None,
         title="Estado del evento.",
@@ -83,9 +82,16 @@ def delete_event(event_id: str, token: str = Header(default=None, required=True)
     return msg
 
 
-@router.put("/events/mark_as_check/{event_id}", response_model=EventSchema)
+@router.put("/events/mark_as_check/{event_id}", response_model=EventUpdateSchema)
 def mark_event__as_check(event_id: str, token: str = Header(default=None, required=True)):
     db = connect_to_mongo(token)
-    obj_in = {"status": "revisada"}
+    val = eventCrud.get_event(db, event_id)
+    if val['status'] == 'revisada':
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The event is already reviewed.",
+        )
+    management = True if val['type'] in ['solicitud', 'revision'] else False
+    obj_in = {"status": "revisada", "management": management}
     data = eventCrud.update_event(db, event_id, obj_in)
     return data
