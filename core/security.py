@@ -22,18 +22,18 @@ def create_access_token(
         expire = datetime.utcnow() + expires_delta
     else:
         expire = datetime.utcnow() + timedelta(
-            minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
+             minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
         )
     encoded_jwt = jwt.encode(
-        payload={**data, "exp": expire}, key=settings.SECRET_KEY, algorithm=ALGORITHM)
+        payload={**data, "exp": expire}, key="sdhguidfhadriojhgbrjfgjkfgvjhfk", algorithm=ALGORITHM)
     return encoded_jwt
 
 
 def verify_token(token: str, output=False) -> None:
     try:
         if output:
-            return jwt.decode(token, key=settings.SECRET_KEY, algorithms=["HS256"])
-        jwt.decode(token, key=settings.SECRET_KEY, algorithms=ALGORITHM)
+            return jwt.decode(token, key="sdhguidfhadriojhgbrjfgjkfgvjhfk", algorithms=["HS256"])
+        jwt.decode(token, key="sdhguidfhadriojhgbrjfgjkfgvjhfk", algorithms=ALGORITHM)
     except exceptions.DecodeError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

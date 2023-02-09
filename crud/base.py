@@ -15,4 +15,16 @@ class CRUDBase():
         db_obj['id'] = str(db_obj['_id'])
         del db_obj['_id']
         return db_obj
+
+    def get_all(self, db: database, arg):
+        data = []
+        print(arg)
+        extre_param = {"$and": [arg]} if arg else {}
+        for doc in db.find(extre_param):
+            doc['id'] = str(doc['_id'])
+            del doc['_id']
+            data.append(doc)
+        return data
+
+
 crudbase = CRUDBase()

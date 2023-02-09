@@ -1,11 +1,9 @@
 from models.event import Event
 from crud.base import crudbase
 from pymongo import database
+import datetime as dt
 
 from fastapi import HTTPException, status
-
-
-from schemas.event import EventCreate, EventUpdates
 
 
 class CRUDEvent():
@@ -17,11 +15,12 @@ class CRUDEvent():
                 detail="Value not allowed.",
             )
         obj_in['status'] = "pendiente"
-        obj_in['date'] = ""
-
-        new_event = crudbase.create(db.event, obj_in)
-
+        obj_in['date'] = dt.datetime.today().strftime("%Y-%m-%d %H:%M:%S")
+        new_event = crudbase.create(db.events, obj_in)
         return new_event
+
+    def get_multi_events(self, db: database, arg):
+        return crudbase.get_all(db.events, arg)
 
 
 eventCrud = CRUDEvent()
