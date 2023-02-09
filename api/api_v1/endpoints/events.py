@@ -10,8 +10,7 @@ router = APIRouter()
 
 
 @router.get("/events", response_model=list[EventSchema])
-async def read_events(token: str = Header(default=None, required=True),
-                     status: str | None = Query(
+async def read_events(token: str = Header(default=None, required=True), status: str | None = Query(
         default=None,
         title="Estado del evento.",
         description="Recuerda utilizar solo estos valores: [solicitud, revision, aprobacion].",
@@ -38,7 +37,7 @@ async def read_events(token: str = Header(default=None, required=True),
 
 
 @router.post("/events", response_model=EventSchema)
-async def create_event(event: Event, token: str = Header(default=None, required=True)) -> any:
+async def create_event(event: Event = None, token: str = Header(default=None, required=True)) -> any:
     """
     Crear un nuevo Evento.
 
@@ -48,8 +47,12 @@ async def create_event(event: Event, token: str = Header(default=None, required=
     * `type`: Solo estan permitidos los siguientes valores : [solicitud, revision, aprobacion].
     * `description`: Es una cadena de texto plano no mayor a 120 caracteres.
     """
-
     db = connect_to_mongo(token)
+    if event == None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The json is required.",
+        )
     data = eventCrud.create_event(db, dict(event))
     return data
 
