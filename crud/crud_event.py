@@ -26,5 +26,8 @@ class CRUDEvent():
     def get_event(self, db: database, event_id: str):
         return crudbase.get_one(db.events, event_id)
 
+    def update_event(self, db: database, event_id: str, obj_in: dict):
+        return crudbase.update(db.events, event_id, obj_in)
+
 
 eventCrud = CRUDEvent()

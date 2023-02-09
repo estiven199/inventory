@@ -1,10 +1,10 @@
 from pydantic import BaseModel
-from fastapi import APIRouter,Header, Query
+from fastapi import APIRouter, HTTPException, status, Header, Query
 from schemas.event import EventSchema
 from db.init_db import connect_to_mongo
 
 
-from models.event import Event
+from models.event import Event, EvenUpdate
 from crud.crud_event import eventCrud
 
 router = APIRouter()
@@ -59,4 +59,18 @@ async def create_event(event: Event, token: str = Header(default=None, required=
 def get_event(event_id: str, token: str = Header(default=None, required=True)):
     db = connect_to_mongo(token)
     data = eventCrud.get_event(db, event_id)
-    return data if data else "El evento no existe"
+    return data if data else "The event does not exist.."
+
+
+@router.put("/events/{event_id}", response_model=EventSchema)
+def updaate_event(event: EvenUpdate, event_id: str, token: str = Header(default=None, required=True)):
+    db = connect_to_mongo(token)
+    val = eventCrud.get_event(db, event_id)
+    if val['status'] == 'revisada':
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The event cannot be modified.",
+        )
+    event = {k: v for k, v in dict(event).items() if v != None}
+    data = eventCrud.update_event(db, event_id, event)
+    return data if data else "The event does not exist."

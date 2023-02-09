@@ -10,4 +10,4 @@ class EventSchema(BaseModel):
     type: str 
     description: str
     date:str
-    status:str
+    status:str    

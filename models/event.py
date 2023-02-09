@@ -8,5 +8,7 @@ class Event(BaseModel):
     description: str
 
 
-class EvenUpdate(Event):
-    status: str
+class EvenUpdate(BaseModel):
+    name: str = None
+    type: str = None
+    description: str = None
