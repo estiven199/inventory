@@ -1,0 +1,23 @@
+[
+    {
+       
+        "name": "AGP156",
+        "type": "solicitud",
+        "description": "Auditar el  aceites Girasol de 3 litros en el punto de venta 156"
+ 
+    },
+    {
+       
+        "name": "AGP156",
+        "type": "revision",
+        "description": "Revisar la auditoria el Aceite Girasol de 3 litros del punto de venta 156"
+      
+    },
+    {
+       
+        "name": "AGP156",
+        "type": "aprobacion",
+        "description": "Aprobar la revision de la auditoria del Aceite Girasol de 3 litros del punto de venta 156"
+      
+    }
+]

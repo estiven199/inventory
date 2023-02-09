@@ -1,9 +1,4 @@
-from typing import Optional
 from pydantic import BaseModel
-from fastapi import Query
-
-# Shared properties
-
 
 class EventSchema(BaseModel):
     id: str
@@ -12,7 +7,6 @@ class EventSchema(BaseModel):
     description: str
     date: str
     status: str
-
 
 class EventUpdateSchema(EventSchema):
     management: bool

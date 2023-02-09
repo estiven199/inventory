@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 
 import jwt
 from jwt import exceptions
-from os import getenv
 from passlib.context import CryptContext
 from fastapi import HTTPException, status
 

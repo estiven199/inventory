@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, status, Header, Query
 from schemas.event import EventSchema, EventUpdateSchema
 from db.init_db import connect_to_mongo
 
+import json
 
 from models.event import Event, EvenUpdate
 from crud.crud_event import eventCrud
@@ -98,3 +99,13 @@ def mark_event__as_check(event_id: str, token: str = Header(default=None, requir
     obj_in = {"status": "revisada", "management": management}
     data = eventCrud.update_event(db, event_id, obj_in)
     return data
+
+
+@router.post("/genetare_data")
+def generate_data_of_example(token: str = Header(default=None, required=True)):
+    db = connect_to_mongo(token)
+    with open("data_example.json", "r") as file:
+        data = json.load(file)
+    for doc in data:
+        eventCrud.create_event(db, doc)
+    return str(data)
