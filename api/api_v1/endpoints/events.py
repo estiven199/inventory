@@ -81,3 +81,11 @@ def delete_event(event_id: str, token: str = Header(default=None, required=True)
     db = connect_to_mongo(token)
     msg = eventCrud.delete_event(db, event_id)
     return msg
+
+
+@router.put("/events/mark_as_check/{event_id}", response_model=EventSchema)
+def mark_event__as_check(event_id: str, token: str = Header(default=None, required=True)):
+    db = connect_to_mongo(token)
+    obj_in = {"status": "revisada"}
+    data = eventCrud.update_event(db, event_id, obj_in)
+    return data
