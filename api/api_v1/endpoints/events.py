@@ -11,12 +11,12 @@ router = APIRouter()
 
 
 @router.get("/events", response_model=list[EventSchema])
-async def read_events(token: str = Header(default=None, required=True), status: str | None = Query(
+async def read_events(token: str = Header(default=None, required=True), status: str = Query(
         default=None,
         title="Estado del evento.",
         description="Recuerda utilizar solo estos valores: [solicitud, revision, aprobacion].",
 ),
-    management: bool | None = Query(
+    management: bool = Query(
     default=None,
     title="Eventos según la gestión.",
     description="Utiliza True para filtrar los eventos que necestian gestión.",
@@ -59,14 +59,14 @@ async def create_event(event: Event = None, token: str = Header(default=None, re
 
 
 @router.get("/events/{event_id}", response_model=EventSchema)
-def get_event(event_id: str, token: str = Header(default=None, required=True)):
+async def get_event(event_id: str, token: str = Header(default=None, required=True)):
     db = connect_to_mongo(token)
     data = eventCrud.get_event(db, event_id)
     return data if data else "The event does not exist.."
 
 
 @router.put("/events/{event_id}", response_model=EventSchema)
-def updaate_event(event: EvenUpdate, event_id: str, token: str = Header(default=None, required=True)):
+async def updaate_event(event: EvenUpdate, event_id: str, token: str = Header(default=None, required=True)):
     db = connect_to_mongo(token)
     val = eventCrud.get_event(db, event_id)
     if val['status'] == 'revisada':
@@ -80,14 +80,14 @@ def updaate_event(event: EvenUpdate, event_id: str, token: str = Header(default=
 
 
 @router.delete("/events/{event_id}")
-def delete_event(event_id: str, token: str = Header(default=None, required=True)):
+async def delete_event(event_id: str, token: str = Header(default=None, required=True)):
     db = connect_to_mongo(token)
     msg = eventCrud.delete_event(db, event_id)
     return msg
 
 
 @router.put("/events/mark_as_check/{event_id}", response_model=EventUpdateSchema)
-def mark_event__as_check(event_id: str, token: str = Header(default=None, required=True)):
+async def mark_event__as_check(event_id: str, token: str = Header(default=None, required=True)):
     db = connect_to_mongo(token)
     val = eventCrud.get_event(db, event_id)
     if val['status'] == 'revisada':
@@ -102,7 +102,7 @@ def mark_event__as_check(event_id: str, token: str = Header(default=None, requir
 
 
 @router.post("/genetare_data")
-def generate_data_of_example(token: str = Header(default=None, required=True)):
+async def generate_data_of_example(token: str = Header(default=None, required=True)):
     db = connect_to_mongo(token)
     with open("data_example.json", "r") as file:
         data = json.load(file)
