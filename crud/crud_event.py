@@ -16,11 +16,15 @@ class CRUDEvent():
             )
         obj_in['status'] = "pendiente"
         obj_in['date'] = dt.datetime.today().strftime("%Y-%m-%d %H:%M:%S")
+        obj_in['management'] = ""
         new_event = crudbase.create(db.events, obj_in)
         return new_event
 
-    def get_multi_events(self, db: database, arg):
+    def get_multi_events(self, db: database, arg: dict):
         return crudbase.get_all(db.events, arg)
+
+    def get_event(self, db: database, event_id: str):
+        return crudbase.get_one(db.events, event_id)
 
 
 eventCrud = CRUDEvent()

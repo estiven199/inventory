@@ -11,7 +11,11 @@ ca = certifi.where()
 
 
 def connect_to_mongo(token: str) -> database:
-
+    if token == None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Token field required",
+        )
     f = Fernet(getenv("SECRET"))
     tokens = verify_token(token, output=True)
     try:
